@@ -1,7 +1,9 @@
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 typedef struct Process {
+    int id;
     int execTime;
     int turnoverTime;
 } Process;
@@ -9,9 +11,13 @@ typedef struct Process {
 void table(Process processes[], int n) {
     cout << endl << "Process\tTurnTime ExecTime WaitTime" << endl;
     for (int i = 0; i < n; i++) {
-        cout << "P" << i+1 << "\t" << processes[i].turnoverTime << "\t " << processes[i].execTime << "\t  " << processes[i].turnoverTime - processes[i].execTime << endl;
+        cout << "P" << processes[i].id << "\t" << processes[i].turnoverTime << "\t " << processes[i].execTime << "\t  " << processes[i].turnoverTime - processes[i].execTime << endl;
     }
     cout << endl;
+}
+
+bool compare(Process p1, Process p2) {
+    return p1.execTime < p2.execTime;
 }
 
 int main() {
@@ -24,8 +30,10 @@ int main() {
         cout << "Execution time of process #" << i+1 << "? ";
         int time = 0;
         cin >> time;
+        processes[i].id = i+1;
         processes[i].execTime = time;
     }
+    sort(processes, processes + n, compare);
     int currentTime = 0;
     for (int i = 0; i < n; i++) {
         currentTime += processes[i].execTime;
